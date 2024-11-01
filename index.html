@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>魔法世界</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom right, #2c3e50, #3498db);
+            color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+        .info-section {
+            padding: 20px;
+            background-color: rgba(44, 62, 80, 0.85);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+        .info-section p {
+            font-size: 24px;
+            line-height: 1.6;
+        }
+        .info-section details {
+            font-size: 18px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-top: 1px solid #eaeaea;
+            padding-top: 10px;
+        }
+        .info-section details:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+        summary {
+            font-weight: bold;
+            color: #FFD700;
+        }
+        summary:hover {
+            color: #FFA500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">魔法世界</div>
+        <div class="info-section">
+            <p><b>世界简介</b>:</p>
+            <details>
+                <summary>点击展开项目 1</summary>
+                我们住万事屋楼上。<br>
+                我们重视万事屋的工作。<br>
+                万事屋承接各种委托，一次只有一个委托。<br>
+            </details>
+            <details>
+                <summary>点击展开项目 2</summary>
+                我们在家穿衣服。<br>
+                林清夏嫉妒值满时会化身女王。<br>
+                女王状态的林清夏在嫉妒值低于10%时回归状态。<br>
+            </details>
+            <details>
+                <summary>点击展开项目 3</summary>
+                我和林清夏从小一起长大，互为唯一。<br>
+                这是我们的故事。<br>
+                我们的友情经受住了时间的考验。<br>
+            </details>
+            <details>
+                <summary>点击展开项目 4</summary>
+                这里是魔法师的故乡，神秘的力量在空气中流动。<br>
+                每当夜幕降临，星星的光辉会唤醒沉睡的魔法。<br>
+            </details>
+            <details>
+                <summary>点击展开项目 5</summary>
+                传说中的魔法水晶隐藏在森林深处，只有勇敢者才能找到。<br>
+                获得水晶将赋予持有者无与伦比的力量。<br>
+            </details>
+        </div>
+    </div>
+
+    <script>
+        function createMeteor() {
+            const meteor = document.createElement('div');
+            meteor.style.position = 'absolute';
+            meteor.style.width = '5px';
+            meteor.style.height = '5px';
+            meteor.style.backgroundColor = 'white';
+            meteor.style.borderRadius = '50%';
+            meteor.style.boxShadow = '0 0 10px white, 0 0 20px white';
+            meteor.style.left = Math.random() * window.innerWidth + 'px';
+            meteor.style.top = '-10px';
+            document.body.appendChild(meteor);
+
+            let x = parseFloat(meteor.style.left);
+            let y = -10;
+            const angle = Math.random() * (Math.PI / 4) - Math.PI / 8; // 随机角度
+            const speed = 2 + Math.random() * 3; // 随机速度
+
+            function animate() {
+                x += Math.cos(angle) * speed;
+                y += Math.sin(angle) * speed;
+
+                meteor.style.left = x + 'px';
+                meteor.style.top = y + 'px';
+
+                if (x > window.innerWidth || y > window.innerHeight) {
+                    meteor.remove();
+                } else {
+                    requestAnimationFrame(animate);
+                }
+            }
+            animate();
+        }
+
+        setInterval(createMeteor, 500); // 每隔500毫秒创建一个流星
+    </script>
+</body>
+</html>
