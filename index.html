@@ -2,130 +2,347 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>魔法世界</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神秘魔法世界</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+        
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(to bottom right, #2c3e50, #3498db);
-            color: #f4f4f4;
             margin: 0;
             padding: 0;
+            font-family: 'Ma Shan Zheng', cursive;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0daf1;
             min-height: 100vh;
-            overflow: hidden;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+            overflow-x: hidden;
             position: relative;
         }
-        .title {
+
+        /* 魔法粒子效果 */
+        .magic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .magic-guide {
+            background: rgba(20, 20, 40, 0.7);
+            backdrop-filter: blur(10px);
+            color: #f0e6ff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.2);
+            max-width: 800px;
+            margin: 50px auto;
+            position: relative;
+            border: 2px solid rgba(147, 112, 219, 0.3);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .magic-guide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                transparent 20%, 
+                rgba(147, 112, 219, 0.1) 40%,
+                transparent 60%);
+            animation: shimmer 3s infinite linear;
+            z-index: -1;
+        }
+
+        .magic-guide h1 {
+            color: #ffd700;
             text-align: center;
-            font-size: 36px;
+            font-size: 3em;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                         0 0 20px rgba(255, 215, 0, 0.3),
+                         0 0 30px rgba(255, 215, 0, 0.2);
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .section {
+            background: rgba(30, 30, 50, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.3);
+        }
+
+        .section h2 {
+            color: #da70d6;
+            border-bottom: 2px solid rgba(218, 112, 214, 0.3);
+            padding-bottom: 15px;
+            font-size: 2em;
+            margin-top: 0;
+            text-shadow: 0 0 5px rgba(218, 112, 214, 0.5);
+        }
+
+        .magic-guide details {
             margin-bottom: 20px;
-            color: #FFD700;
+            background: rgba(147, 112, 219, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            transition: all 0.3s ease;
         }
-        .info-section {
-            padding: 20px;
-            background-color: rgba(44, 62, 80, 0.85);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+
+        .magic-guide details:hover {
+            background: rgba(147, 112, 219, 0.2);
         }
-        .info-section p {
-            font-size: 24px;
-            line-height: 1.6;
-        }
-        .info-section details {
-            font-size: 18px;
-            margin-top: 10px;
+
+        .magic-guide summary {
             cursor: pointer;
-            border-top: 1px solid #eaeaea;
-            padding-top: 10px;
-        }
-        .info-section details:first-of-type {
-            border-top: none;
-            padding-top: 0;
-        }
-        summary {
             font-weight: bold;
-            color: #FFD700;
+            color: #9370db;
+            font-size: 1.3em;
+            transition: all 0.4s ease;
+            list-style: none;
+            padding: 10px;
+            border-radius: 8px;
         }
-        summary:hover {
-            color: #FFA500;
+
+        .magic-guide summary:hover {
+            color: #ffa7f9;
+            text-shadow: 0 0 15px #ffa7f9;
+            background: rgba(147, 112, 219, 0.1);
+        }
+
+        .magic-guide details[open] summary {
+            margin-bottom: 15px;
+            background: rgba(147, 112, 219, 0.15);
+        }
+
+        .magic-guide details > summary::before {
+            content: '✨ ';
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .magic-guide details[open] > summary::before {
+            content: '🌟 ';
+            animation: rotate 1s ease;
+        }
+
+        .magic-guide ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .magic-guide li {
+            margin-bottom: 15px;
+            color: #e6e6fa;
+            position: relative;
+        }
+
+        .magic-item {
+            background: rgba(147, 112, 219, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 3px solid #9370db;
+            transition: all 0.3s ease;
+        }
+
+        .magic-item:hover {
+            background: rgba(147, 112, 219, 0.2);
+            transform: translateX(10px);
+        }
+
+        /* 增强的星星和流星效果 */
+        .star {
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            position: absolute;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(90deg, #fff, transparent);
+            box-shadow: 0 0 20px #fff, 0 0 40px #9370db;
+            position: absolute;
+            animation: shoot 2s linear;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                             0 0 20px rgba(255, 215, 0, 0.3),
+                             0 0 30px rgba(255, 215, 0, 0.2);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.6),
+                             0 0 30px rgba(255, 215, 0, 0.4),
+                             0 0 40px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-200px) translateY(200px) rotate(-45deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">魔法世界</div>
-        <div class="info-section">
-            <p><b>世界简介</b>:</p>
+    <div class="magic-particles"></div>
+    <div class="magic-guide">
+        <h1>✧ 神秘魔法世界 ✧</h1>
+
+        <div class="section">
+            <h2>✨ 魔法源起</h2>
             <details>
-                <summary>点击展开项目 1</summary>
-                我们住万事屋楼上。<br>
-                我们重视万事屋的工作。<br>
-                万事屋承接各种委托，一次只有一个委托。<br>
+                <summary>远古魔法的awakening</summary>
+                <p>在时间的长河中，魔法力量如同星辰般永恒。每当银月高悬，古老的咒语在夜风中低语，唤醒沉睡的魔法能量。大地因魔法的共鸣而颤抖，天空绽放出神秘的极光。</p>
             </details>
             <details>
-                <summary>点击展开项目 2</summary>
-                我们在家穿衣服。<br>
-                林清夏嫉妒值满时会化身女王。<br>
-                女王状态的林清夏在嫉妒值低于10%时回归状态。<br>
+                <summary>魔法学院的创立</summary>
+                <p>千年前，七位大法师在群星的指引下，建立了第一所魔法学院。他们将知识传承给具有天赋的学徒，开启了魔法文明的新纪元。</p>
+            </details>
+        </div>
+
+        <div class="section">
+            <h2>🧙‍♂️ 传奇法师录</h2>
+            <ul>
+                <li>
+                    <details>
+                        <summary>艾尔文·星辰</summary>
+                        <p>"群星之主，掌控天穹，其魔杖所指之处，星河为之倾倒。传说他能够沟通星辰意志，预知宇宙的变迁。在最黑暗的时刻，他曾召唤星光，照亮整个大陆。"</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>梅琳达·叶语</summary>
+                        <p>"自然的知音者，森林的守护灵，万物生长皆由其意。她与古老森林缔结契约，能够倾听树木的低语，安抚狂暴的自然之力。每当春天来临，花朵会为她绽放。"</p>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary>奥利安·时光</summary>
+                        <p>"时间长河的守望者，掌握命运之轮的转动。他独居于时间塔中，记录着世界的每一个重要时刻。据说他能够窥见时间的分支，预知可能的未来。"</p>
+                    </details>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🔮 神秘法器</h2>
+            <details>
+                <summary>命运水晶球</summary>
+                <p>蕴含时空之力的神器，能够映照过去，预见未来。每逢满月之夜，其力量达到顶峰。古老的预言中提到，只有心灵纯净者才能看清水晶球中的真实映像。</p>
             </details>
             <details>
-                <summary>点击展开项目 3</summary>
-                我和林清夏从小一起长大，互为唯一。<br>
-                这是我们的故事。<br>
-                我们的友情经受住了时间的考验。<br>
+                <summary>远古魔法书</summary>
+                <p>记载着失落的魔法文明，其中的咒语能够唤醒沉睡的力量，改变现实的法则。书页是用龙皮制成，墨水中混合着凤凰的眼泪，使得文字能够随着读者的理解而改变。</p>
             </details>
             <details>
-                <summary>点击展开项目 4</summary>
-                这里是魔法师的故乡，神秘的力量在空气中流动。<br>
-                每当夜幕降临，星星的光辉会唤醒沉睡的魔法。<br>
-            </details>
-            <details>
-                <summary>点击展开项目 5</summary>
-                传说中的魔法水晶隐藏在森林深处，只有勇敢者才能找到。<br>
-                获得水晶将赋予持有者无与伦比的力量。<br>
+                <summary>元素权杖</summary>
+                <p>由四大元素祝福的神器，能够调和自然之力。权杖顶端镶嵌着来自天界的宝石，可以汇聚周围的魔法能量，释放强大的元素魔法。</p>
             </details>
         </div>
     </div>
 
     <script>
-        function createMeteor() {
-            const meteor = document.createElement('div');
-            meteor.style.position = 'absolute';
-            meteor.style.width = '5px';
-            meteor.style.height = '5px';
-            meteor.style.backgroundColor = 'white';
-            meteor.style.borderRadius = '50%';
-            meteor.style.boxShadow = '0 0 10px white, 0 0 20px white';
-            meteor.style.left = Math.random() * window.innerWidth + 'px';
-            meteor.style.top = '-10px';
-            document.body.appendChild(meteor);
+        function createMagicParticles() {
+            const container = document.querySelector('.magic-particles');
+            
+            // 创建普通星星
+            function createStar() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                container.appendChild(star);
 
-            let x = parseFloat(meteor.style.left);
-            let y = -10;
-            const angle = Math.random() * (Math.PI / 4) - Math.PI / 8; // 随机角度
-            const speed = 2 + Math.random() * 3; // 随机速度
-
-            function animate() {
-                x += Math.cos(angle) * speed;
-                y += Math.sin(angle) * speed;
-
-                meteor.style.left = x + 'px';
-                meteor.style.top = y + 'px';
-
-                if (x > window.innerWidth || y > window.innerHeight) {
-                    meteor.remove();
-                } else {
-                    requestAnimationFrame(animate);
-                }
+                setTimeout(() => {
+                    star.remove();
+                }, 3000);
             }
-            animate();
+
+            // 创建流星
+            function createShootingStar() {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                star.style.left = `${Math.random() * 100 + 20}%`;
+                star.style.top = `${Math.random() * 50}%`;
+                container.appendChild(star);
+
+                setTimeout(() => {
+                    star.remove();
+                }, 2000);
+            }
+
+            // 定期创建星星
+            setInterval(createStar, 300);
+
+            // 随机创建流星
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30%的概率创建流星
+                    createShootingStar();
+                }
+            }, 2000);
         }
 
-        setInterval(createMeteor, 500); // 每隔500毫秒创建一个流星
+        createMagicParticles();
+
+        // 鼠标移动魔法效果
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.3) { // 降低粒子生成频率
+                const particle = document.createElement('div');
+                particle.className = 'star';
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                particle.style.position = 'fixed';
+                particle.style.pointerEvents = 'none';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        });
     </script>
 </body>
 </html>
